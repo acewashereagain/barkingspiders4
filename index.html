@@ -6,48 +6,116 @@
 <title>Sigma Games 9000</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #121212;
-  color: white;
-}
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: white;
+  }
 
-header {
-  background: #222;
-  padding: 20px;
-  text-align: center;
-}
+  header {
+    background: #222;
+    padding: 20px;
+    text-align: center;
+  }
 
-.game-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
-  padding: 20px;
-}
+  /* Top controls (Search + Categories) */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding: 15px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+  }
 
-.game-card {
-  background: #1e1e1e;
-  border-radius: 8px;
-  padding: 10px;
-  text-align: center;
-}
+  #searchBar {
+    width: min(500px, 90%);
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #111;
+    color: white;
+    font-size: 16px;
+    outline: none;
+  }
 
-.game-card img {
-  width: 100%;
-  border-radius: 6px;
-}
+  .category-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 
-.game-card button {
-  margin-top: 10px;
-  width: 100%;
-  padding: 10px;
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+  .cat-btn {
+    padding: 9px 12px;
+    border-radius: 6px;
+    background: #2b2b2b;
+    color: white;
+    border: 1px solid #444;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .cat-btn.active {
+    background: #4caf50;
+    border-color: #4caf50;
+    color: white;
+  }
+
+  /* Games grid */
+  .game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .game-card {
+    background: #1e1e1e;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    border: 2px solid #1e1e1e;
+  }
+
+  .game-card.hidden {
+    display: none;
+  }
+
+  .game-card img {
+    width: 100%;
+    border-radius: 6px;
+  }
+
+  .game-card button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #333;
+    margin-top: 6px;
+    opacity: 0.9;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 25px;
+    color: #bbb;
+    display: none;
+  }
 </style>
 </head>
 
@@ -58,54 +126,280 @@ header {
   <p>i just farted</p>
 </header>
 
-<div class="game-list">
+<!-- Controls -->
+<div class="controls">
+  <input id="searchBar" type="text" placeholder="Search games..." />
 
-  <div class="game-card">
+  <div class="category-buttons">
+    <button class="cat-btn active" data-category="all">All</button>
+    <button class="cat-btn" data-category="sandbox">Sandbox</button>
+    <button class="cat-btn" data-category="shooter">Shooter</button>
+    <button class="cat-btn" data-category="driving">Driving</button>
+    <button class="cat-btn" data-category="platformer">Platformer</button>
+    <button class="cat-btn" data-category="simulator">Simulator</button>
+    <button class="cat-btn" data-category="other">Other</button>
+    <button class="cat-btn" data-category="horror">Horror</button>
+    <button class="cat-btn" data-category="sports">Sports</button>
+  </div>
+</div>
+
+<div class="no-results" id="noResults">No games found.</div>
+
+<!-- Games -->
+<div class="game-list" id="gameList">
+
+  <div class="game-card" data-title="bitlife" data-category="simulator">
     <h3>BitLife</h3>
     <img src="assets/game-thumbnails/bitlife.png">
+    <div class="tag">Simulator</div>
     <button onclick="openGame('games/bitlife/index.html')">Play</button>
   </div>
 
-  <div class="game-card">
+  <div class="game-card" data-title="kour.io kour" data-category="shooter">
     <h3>Kour.io</h3>
     <img src="assets/game-thumbnails/kour-io.jpeg">
+    <div class="tag">Shooter</div>
     <button onclick="openGame('games/kour-io/html/launcher.html')">Play</button>
   </div>
 
-  <div class="game-card">
+  <div class="game-card" data-title="eaglercraft minecraft" data-category="sandbox">
     <h3>Eaglercraft</h3>
     <img src="assets/game-thumbnails/eaglercraft.jpg">
+    <div class="tag">Sandbox</div>
     <button onclick="openGame('games/eaglercraft/index.html')">Play</button>
   </div>
 
-  <div class="game-card">
+  <div class="game-card" data-title="geometry dash" data-category="platformer">
     <h3>Geometry Dash</h3>
     <img src="assets/game-thumbnails/geometry-dash.png">
+    <div class="tag">Platformer</div>
     <button onclick="openGame('games/geometry-dash/index.html')">Play</button>
   </div>
 
-  <div class="game-card">
+  <div class="game-card" data-title="jelly drift" data-category="driving">
     <h3>Jelly Drift</h3>
     <img src="assets/game-thumbnails/jelly-drift.png">
+    <div class="tag">Driving</div>
     <button onclick="openGame('games/jelly-drift/index.html')">Play</button>
   </div>
 
-  <div class="game-card">
+  <div class="game-card" data-title="people playground" data-category="sandbox">
     <h3>People Playground</h3>
     <img src="assets/game-thumbnails/people-playground.jpg">
+    <div class="tag">Sandbox</div>
     <button onclick="openGame('games/people-playground/index.html')">Play</button>
   </div>
 
-  <div class="game-card">
+  <div class="game-card" data-title="superhot" data-category="shooter">
     <h3>Superhot</h3>
     <img src="assets/game-thumbnails/superhot.jpg">
+    <div class="tag">Shooter</div>
     <button onclick="openGame('games/superhot/index.html')">Play</button>
   </div>
 
-  <div class="game-card">
+  <div class="game-card" data-title="time shooter 3" data-category="shooter">
     <h3>Time Shooter 3</h3>
     <img src="assets/game-thumbnails/time-shooter-3.png">
+    <div class="tag">Shooter</div>
     <button onclick="openGame('games/time-shooter-3/index.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="bloons-td5" data-category="other">
+    <h3>Bloons TD5</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/bloonsTD5.html')">Play</button>
+  </div>
+
+
+  <div class="game-card" data-title="breaking-the-bank" data-category="simulator">
+    <h3>Breaking the Bank</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Simulator</div>
+    <button onclick="openGame('games/breakingthebank.html')">Play</button>
+  </div>
+
+  
+  <div class="game-card" data-title="crazy-motorcycle" data-category="driving">
+    <h3>Crazy Motorcycle</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Driving</div>
+    <button onclick="openGame('games/crazymotorcycle.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="crossy-road" data-category="other">
+    <h3>Crossy Road</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/crossyroad.htm')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="flappy-bird" data-category="other">
+    <h3>Flappy Bird</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/flappybird.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="fnaf" data-category="horror">
+    <h3>Five Nights at Freddy's</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Horror</div>
+    <button onclick="openGame('games/fnaf.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="football-bros" data-category="sports">
+    <h3>Football Bros</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Sports</div>
+    <button onclick="openGame('games/footballbros.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="football-legends" data-category="sports">
+    <h3>Football Legends</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Sports</div>
+    <button onclick="openGame('games/footballlegends.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="getawayshootout" data-category="shooter">
+    <h3>Getawayshootout</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Shooter</div>
+    <button onclick="openGame('games/getawayshootout.htm')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="google-baseball" data-category="sports">
+    <h3>Google Baseball</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Sports</div>
+    <button onclick="openGame('games/googlebaseball.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="happy-wheels" data-category="simulator">
+    <h3>Happy Wheels</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Simulator</div>
+    <button onclick="openGame('games/happywheels.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="Example" data-category="other">
+    <h3>Jetpack Joyride</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/jetpackjoyride.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="johnny-trigger" data-category="shooter">
+    <h3>Johnny Trigger</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Shooter</div>
+    <button onclick="openGame('games/johnnytrigger.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="monkeymart" data-category="simulator">
+    <h3>Monkeymart</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Simulator</div>
+    <button onclick="openGame('games/monkeymart.htm')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="pacman" data-category="other">
+    <h3>Pac-man</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/pacman.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="paper-io-2" data-category="other">
+    <h3>Paper.io 2</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/paperio2.htm')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="plants-vs-zombies" data-category="other">
+    <h3>Plants vs. Zombies</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/plantsvszombies.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="polytrack" data-category="driving">
+    <h3>Polytrack</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Driving</div>
+    <button onclick="openGame('games/polytrack.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="pou" data-category="simulator">
+    <h3>Pou</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Simulator</div>
+    <button onclick="openGame('games/pou.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="ragdoll-archer" data-category="sandbox">
+    <h3>Ragdoll Archers</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Sandbox</div>
+    <button onclick="openGame('games/ragdollarchers.htm')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="ragdoll-hit" data-category="sandbox">
+    <h3>Ragdoll Hit</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Sandbox</div>
+    <button onclick="openGame('games/ragdollhit.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="retrobowl" data-category="sports">
+    <h3>Retrobowl</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Sports</div>
+    <button onclick="openGame('games/retrobowl.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="rooftop-snipers-2" data-category="shooter">
+    <h3>Rooftop Snipers 2</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Shooter</div>
+    <button onclick="openGame('games/rooftopsnipers2.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="Example" data-category="platformer">
+    <h3>Run</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Platformer</div>
+    <button onclick="openGame('games/run.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="slope" data-category="platformer">
+    <h3>Slope</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Platformer</div>
+    <button onclick="openGame('games/slope.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="territorial-io" data-category="other">
+    <h3>Territorial.io</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/territorialio.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="time-shooter-2" data-category="shooter">
+    <h3>Time Shooter 2</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Shooter</div>
+    <button onclick="openGame('games/timeshooter2.html')">Play</button>
+  </div>
+
+  <div class="game-card" data-title="wordle-unlimited" data-category="other">
+    <h3>Wordle Unlimited</h3>
+    <img src="assets/game-thumbnails/Example.png">
+    <div class="tag">Other</div>
+    <button onclick="openGame('games/wordleunlimited.html')">Play</button>
   </div>
 
 </div>
@@ -114,6 +408,50 @@ header {
 function openGame(path) {
   window.location.href = "play.html?game=" + encodeURIComponent(path);
 }
+
+let selectedCategory = "all";
+const searchBar = document.getElementById("searchBar");
+const gameCards = document.querySelectorAll(".game-card");
+const categoryButtons = document.querySelectorAll(".cat-btn");
+const noResults = document.getElementById("noResults");
+
+function filterGames() {
+  const query = searchBar.value.trim().toLowerCase();
+  let visibleCount = 0;
+
+  gameCards.forEach(card => {
+    const title = (card.getAttribute("data-title") || "").toLowerCase();
+    const category = card.getAttribute("data-category");
+
+    const matchesSearch = title.includes(query);
+    const matchesCategory = (selectedCategory === "all" || category === selectedCategory);
+
+    if (matchesSearch && matchesCategory) {
+      card.classList.remove("hidden");
+      visibleCount++;
+    } else {
+      card.classList.add("hidden");
+    }
+  });
+
+  noResults.style.display = visibleCount === 0 ? "block" : "none";
+}
+
+// Category button clicks
+categoryButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    categoryButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    selectedCategory = btn.dataset.category;
+    filterGames();
+  });
+});
+
+// Search typing
+searchBar.addEventListener("input", filterGames);
+
+// Start filtered
+filterGames();
 </script>
 
 </body>
